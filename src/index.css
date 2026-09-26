@@ -4,6 +4,7 @@
   --font-display: "Archivo", "Inter Tight", system-ui, sans-serif;
   --font-body: "Inter", system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --font-hand: "Caveat", cursive;
 
   --color-ink: #111111;
   --color-dark: #151515;
@@ -92,6 +93,17 @@
   }
   .font-mono {
     font-family: var(--font-mono);
+  }
+  .font-hand {
+    font-family: var(--font-hand);
+  }
+
+  /* Tileable film-grain texture, drawn once as an SVG turbulence filter rather than
+     a shipped image — cheap to repeat over any section, kept very low-opacity so it
+     reads as analog noise rather than a visible pattern. */
+  .grain-overlay {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-repeat: repeat;
   }
 
   .micro-label {

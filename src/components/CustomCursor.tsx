@@ -66,7 +66,7 @@ export default function CustomCursor() {
       style={{
         width: active ? 64 : 12,
         height: active ? 64 : 12,
-        background: active ? 'rgba(184,152,94,0.15)' : 'rgba(184,152,94,0.9)',
+        background: active ? 'rgba(212,175,55,0.15)' : 'rgba(212,175,55,0.9)',
       }}
     >
       {label && (

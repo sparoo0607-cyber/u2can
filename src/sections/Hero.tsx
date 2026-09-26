@@ -1,17 +1,61 @@
+import { useRef, useState } from 'react'
 import { motion } from 'framer-motion'
 import ParticleField from '../components/ParticleField'
 import MicroLabel from '../components/MicroLabel'
+import { useReducedMotion } from '../lib/useReducedMotion'
+
+const HERO_CLIPS = [
+  '/assets/video/hero-1.mp4',
+  '/assets/video/hero-2.mp4',
+  '/assets/video/hero-3.mp4',
+  '/assets/video/hero-4.mp4',
+]
 
 export default function Hero() {
+  const [clipIndex, setClipIndex] = useState(0)
+  const videoRef = useRef<HTMLVideoElement>(null)
+  const reducedMotion = useReducedMotion()
+
+  function handleEnded() {
+    setClipIndex((i) => (i + 1) % HERO_CLIPS.length)
+  }
+
   return (
     <section id="top" className="relative flex h-[100svh] min-h-[640px] w-full flex-col overflow-hidden bg-[#111111] text-[#ececea]">
-      {/* Background photo — largest, best-resolution real photo (student group in event tees) */}
+      {/* Background — cycles through four clips back-to-back, one after another, looping
+          from the last back to the first. Falls back to a still photo when the visitor
+          has requested reduced motion, since autoplaying video ignores that preference
+          less obviously than a CSS animation would. */}
       <div className="absolute inset-0">
-        <img
-          src="/assets/real/group-photo-students.jpeg"
-          alt="U2C students gathered together in matching club event t-shirts"
-          className="h-full w-full object-cover object-top grayscale contrast-125"
-        />
+        {reducedMotion ? (
+          <img
+            src="/assets/real/group-photo-students.jpeg"
+            alt="U2C students gathered together in matching club event t-shirts"
+            className="h-full w-full object-cover object-top grayscale contrast-125"
+          />
+        ) : (
+          // Source clips were shot/exported sideways (90°), so the raw frame is rotated
+          // back upright here. Rotating a landscape-sized box by 90° turns it portrait,
+          // so width/height are pre-swapped to viewport units (100svh × 100vw) and the
+          // whole thing is centered — a plain object-cover can't do this rotation itself.
+          <video
+            key={clipIndex}
+            ref={videoRef}
+            src={HERO_CLIPS[clipIndex]}
+            poster="/assets/real/group-photo-students.jpeg"
+            autoPlay
+            muted
+            playsInline
+            preload="auto"
+            onEnded={handleEnded}
+            className="absolute left-1/2 top-1/2 object-cover grayscale contrast-125"
+            style={{
+              width: '100svh',
+              height: '100vw',
+              transform: 'translate(-50%, -50%) rotate(-90deg)',
+            }}
+          />
+        )}
         <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/55 to-black/90" />
         <div className="absolute inset-0 bg-[#151515] mix-blend-color opacity-40" />
       </div>
