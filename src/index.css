@@ -1,0 +1,160 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Archivo", "Inter Tight", system-ui, sans-serif;
+  --font-body: "Inter", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  --color-ink: #111111;
+  --color-dark: #151515;
+  --color-dark-2: #171717;
+  --color-dark-3: #1c1c1c;
+  --color-paper: #e7e7e3;
+  --color-paper-2: #dedad2;
+  --color-gold: #d4af37;
+  --color-gold-dim: #a6821c;
+  --color-line-dark: rgba(255, 255, 255, 0.12);
+  --color-line-light: rgba(17, 17, 17, 0.14);
+}
+
+/*
+ * NOTE: everything below is wrapped in Tailwind's `base`/`components` cascade
+ * layers on purpose. Tailwind v4 emits its own utilities (e.g. `.hidden`,
+ * `.md:flex`) inside `@layer utilities`, which is unlayered-CSS-beats-all by
+ * the CSS cascade-layers spec — any plain, un-layered rule here would always
+ * out-rank a responsive utility like `md:inline-flex` regardless of source
+ * order or specificity, silently breaking responsive show/hide. Keeping our
+ * rules inside `base`/`components` lets Tailwind's `utilities` layer (higher
+ * priority by definition) win as expected.
+ */
+
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  html {
+    background: var(--color-dark);
+    scroll-behavior: auto;
+  }
+
+  html.lenis,
+  html.lenis body {
+    height: auto;
+  }
+
+  body {
+    margin: 0;
+    background: var(--color-dark);
+    color: #ececea;
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+  }
+
+  ::selection {
+    background: var(--color-gold);
+    color: #151515;
+  }
+
+  /* Custom cursor: hide native cursor only when our cursor is active (desktop, fine pointer) */
+  body.u2c-custom-cursor,
+  body.u2c-custom-cursor a,
+  body.u2c-custom-cursor button {
+    cursor: none;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-gold);
+    outline-offset: 3px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  .font-display {
+    font-family: var(--font-display);
+  }
+  .font-mono {
+    font-family: var(--font-mono);
+  }
+
+  .micro-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    opacity: 0.6;
+  }
+
+  .hairline {
+    height: 1px;
+    background: var(--color-line-dark);
+  }
+  .hairline-light {
+    height: 1px;
+    background: var(--color-line-light);
+  }
+
+  .vguide {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: currentColor;
+    opacity: 0.06;
+    pointer-events: none;
+  }
+
+  .btn-rect {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6em;
+    border: 1px solid currentColor;
+    padding: 0.9em 1.6em;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+    background: transparent;
+  }
+
+  .btn-rect:hover,
+  .btn-rect:focus-visible {
+    background: var(--color-gold);
+    border-color: var(--color-gold);
+    color: #151515;
+  }
+
+  .duotone-gold {
+    filter: grayscale(1) contrast(1.15) brightness(0.85) sepia(0.35) hue-rotate(-8deg) saturate(1.4);
+  }
+  .duotone-mono {
+    filter: grayscale(1) contrast(1.2) brightness(0.9);
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
